@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Learning Project</title>
+  <style>
+    :root {
+      --primary: #0066ff;
+      --light: #f9f9f9;
+      --dark: #222;
+    }
+    body { margin:0;font-family: system-ui, sans-serif; line-height:1.6; background:var(--light); }
+    header { background: var(--primary); color:#fff; padding:1rem; }
+    nav { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
+    nav h1 { font-size:1.25rem; margin:0; }
+    nav a { color:#fff; text-decoration:none; margin:0 .5rem; }
+    ul { list-style:none; padding:0; margin:0; display:flex; }
+    li { margin:0 .5rem; }
+    .container { max-width:1000px; margin:auto; padding:1rem; }
+    section { margin:2rem 0; }
+    footer { background:var(--dark); color:#fff; text-align:center; padding:1rem; }
+    button, input, textarea { font-family:inherit; font-size:1rem; }
+    button { background:var(--primary); color:#fff; border:none; padding:.5rem 1rem; cursor:pointer; border-radius:4px; }
+    button:hover { opacity:.9; }
+
+    /* Responsive nav toggle */
+    #menu-btn { display:none; font-size:1.5rem; background:none; border:none; color:#fff; cursor:pointer; }
+    @media (max-width:600px){
+       nav ul{ display:none; width:100%; flex-direction:column; }
+       nav ul.show{ display:block; }
+       nav li{ margin:.5rem 0; text-align:center; }
+       #menu-btn{display:block;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <h1>My Learning Project</h1>
+      <button id="menu-btn" aria-label="Menu">&#9776;</button>
+      <ul id="menu">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section id="home">
+      <h2>Welcome</h2>
+      <p>This is a simple responsive site you can use to practice HTML, CSS and JavaScript. Explore the code and tweak colours, fonts, and layout as you learn.</p>
+    </section>
+
+    <section id="about">
+      <h2>About This Project</h2>
+      <p>The goal is to give you a clean starting point: semantic markup, basic styling, and a minimal script. Fork it, break it, fix it, and make it yours!</p>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <form onsubmit="event.preventDefault(); alert('Thanks for testing!');">
+        <label>Name<br><input type="text" required></label><br><br>
+        <label>Email<br><input type="email" required></label><br><br>
+        <label>Message<br><textarea rows="4"></textarea></label><br><br>
+        <button type="submit">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> My Learning Project
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const btn = document.getElementById('menu-btn');
+    const menu = document.getElementById('menu');
+    btn.addEventListener('click', () => menu.classList.toggle('show'));
+
+    // Update footer year automatically
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
