@@ -1,96 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NBA Playoffs Bracket · Learning Project</title>
-  <style>
-    /* =========  DESIGN TOKENS  ========= */
-    :root {
-      /* brand palette */
-      --primary:   #9400d3;   /* royal blue */
-      --secondary: #ff5722;   /* vivid orange */
-      --accent:    #00bfa6;   /* teal */
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SUMO World Championship · Gudetama Edition</title>
 
-      /* grayscale & surfaces */
-      --bg:        #e79fc4 ;   /* page background */
-      --surface:   #ffffff;   /* cards / bracket */
-      --text:      #222;      /* default text */
-      --header-text:#fff;     /* header/nav links */
-      --radius:    8px;       /* global corner radius */
+  <style>
+    /* =====  DESIGN TOKENS  ===== */
+    :root {
+      --primary:   #9400d3; /* violet */
+      --secondary: #ff5722; /* orange */
+      --accent:    #00bfa6; /* teal  */
+
+      --bg:        #e79fc4; /* light pink */
+      --surface:   #ffffff;
+      --text:      #222;
+      --header-text: #fff;
+      --radius:    8px;
     }
-    /* ---- Dark theme overrides ---- */
     [data-theme="dark"] {
       --primary:   #9400d3;
       --secondary: #ff8a50;
       --accent:    #26c6da;
 
-      --bg:        #121212 ;
+      --bg:        #121212;
       --surface:   #1e1e1e;
       --text:      #e2e2e2;
       --header-text:#fff;
     }
 
-    /* =========  GLOBAL LAYOUT  ========= */
-    *,*:before,*:after{box-sizing:border-box;}
+    /* =====  GLOBAL LAYOUT  ===== */
+    *,*::before,*::after{box-sizing:border-box;}
     body{
-      margin:0;
-      font-family:system-ui, sans-serif;
-      line-height:1.6;
-      background:var(--bg);
-      color:var(--text);
+      margin:0;font-family:system-ui,sans-serif;line-height:1.6;
+      background:var(--bg);color:var(--text);
       transition:background .3s,color .3s;
     }
     img{max-width:100%;height:auto;}
 
-    header{
-      background:var(--primary);
-      color:var(--header-text);
-      padding:1rem;
-    }
-    nav{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      flex-wrap:wrap;
-      max-width:1100px;
-      margin:auto;
-    }
-    nav h1{font-size:1.3rem;margin:0;}
-    nav a{color:var(--header-text);text-decoration:none;margin:0 .5rem;}
+    /* =====  HEADER / NAV  ===== */
+    header{background:var(--primary);color:var(--header-text);padding:1rem;}
+    nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;max-width:1100px;margin:auto;}
 
+    /* Group logo text + gudetama image */
+    .brand{display:flex;align-items:center;gap:.75rem;flex:1;min-width:0;}
+    .brand h1{font-size:1.25rem;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+    .hero-guda{
+      height:48px;width:auto; /* fixed height keeps nav tidy               */
+      object-fit:contain;     /* keep full mascot visible                  */
+      filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));
+      border-radius:var(--radius);
+    }
+
+    nav a{color:var(--header-text);text-decoration:none;margin:0 .5rem;}
     ul{list-style:none;padding:0;margin:0;display:flex;}
     li{margin:0 .5rem;}
 
-    #menu-btn{
-      display:none;
-      font-size:1.6rem;
-      background:none;border:none;color:var(--header-text);cursor:pointer;
-    }
-    #theme-toggle{
-      background:none;border:none;font-size:1.4rem;color:var(--header-text);cursor:pointer;margin-left:.5rem;
-    }
+    #menu-btn{display:none;font-size:1.6rem;background:none;border:none;color:var(--header-text);cursor:pointer;}
+    #theme-toggle{background:none;border:none;font-size:1.4rem;color:var(--header-text);cursor:pointer;margin-left:.5rem;}
 
     @media(max-width:600px){
-      nav ul{display:none;width:100%;flex-direction:column;background:var(--primary);}
+      nav ul{display:none;width:100%;flex-direction:column;background:var(--primary);}/* hide menu */
       nav ul.show{display:block;}
-      nav li{margin:.5rem 0;text-align:center;}
+      nav li{text-align:center;margin:.5rem 0;}
       #menu-btn{display:block;}
+      .brand{flex-basis:100%;justify-content:center;margin-bottom:.5rem;}
     }
-.hero-guda{width:50%;max-height:100px;object-fit:cover;border-radius:var(--radius);}
-    .container{max-width:300px;margin:auto;padding:1rem;}
-    section{margin:2rem 0;}
-    
-    .hero-image{width:100%;max-height:400px;object-fit:cover;border-radius:var(--radius);}
+
+    /* =====  CONTENT  ===== */
     .container{max-width:1100px;margin:auto;padding:1rem;}
     section{margin:2rem 0;}
 
-    /* =========  BRACKET ========= */
+    .hero-image{width:100%;max-height:400px;object-fit:cover;border-radius:var(--radius);}    
+
+    /* =====  BRACKET  ===== */
     .bracket{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
     .bracket-column{background:var(--surface);padding:1rem;border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,.05);}
     .bracket-column h3{text-align:center;margin-top:0;color:var(--primary);}
-    .matchup{display:flex;justify-content:space-between;margin:.25rem 0;padding:.25rem .5rem;border-left:4px solid var(--accent);}
-    .seed{font-weight:bold;color:var(--secondary);}
+    .matchup{display:flex;justify-content:space-between;margin:.25rem 0;padding:.25rem .5rem;border-left:4px solid var(--accent);}   
+    .seed{font-weight:bold;color:var(--secondary);} 
 
     footer{background:var(--surface);color:var(--text);text-align:center;padding:1rem;border-top:2px solid var(--primary);}  
   </style>
@@ -98,12 +87,16 @@
 <body>
   <header>
     <nav>
-      <h1>SUMA WORLD CHAMPIONSHIP w/ Special guest Gudatama</h1>
-      <img class="hero-guda" src="guda.png" alt="Sumo world championship">
+      <div class="brand">
+        <h1>SUMO World Championship · Special Guest Gudetama</h1>
+        <img class="hero-guda" src="guda.png" alt="Gudetama mascot" />
+      </div>
+
       <div>
         <button id="menu-btn" aria-label="Menu">&#9776;</button>
         <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
       </div>
+
       <ul id="menu">
         <li><a href="#home">Home</a></li>
         <li><a href="#bracket">Bracket</a></li>
@@ -114,9 +107,9 @@
 
   <main class="container">
     <section id="home">
-      <img class="hero-image" src="sumo.jpg" alt="Sumo world championship">
-      <h2>WELCOME SUMO FANS</h2>
-      <p>Zoe Vs. Milan in the SUMO WORLD CHAMPIONSHIP!.</p>
+      <img class="hero-image" src="sumo.jpg" alt="Sumo world championship" />
+      <h2>Welcome Sumo Fans</h2>
+      <p>Zoe vs. Milan in the SUMO WORLD CHAMPIONSHIP!</p>
     </section>
 
     <section id="bracket">
@@ -139,7 +132,7 @@
           <div class="matchup"><span class="seed">2</span> Nuggets <span>2&nbsp;&ndash;&nbsp;2</span> Clippers <span class="seed">7</span></div>
         </div>
       </div>
-      <p style="font-size:.9rem;opacity:.8;">Bracket data reflects series status as of April&nbsp;30, 2025. </p>
+      <p style="font-size:.9rem;opacity:.8;">Bracket data reflects series status as of April&nbsp;30&nbsp;2025.</p>
     </section>
 
     <section id="about">
@@ -148,20 +141,18 @@
     </section>
   </main>
 
-  <footer>
-    &copy; <span id="year"></span> NBA&nbsp;Playoffs&nbsp;Learning&nbsp;Project
-  </footer>
+  <footer>&copy; <span id="year"></span> Sumo&nbsp;Championship&nbsp;Learning&nbsp;Project</footer>
 
   <script>
-    /* ===== Mobile nav toggle ===== */
-    const menuBtn = document.getElementById('menu-btn');
-    const menu    = document.getElementById('menu');
+    /* =====  Mobile nav toggle  ===== */
+    const menuBtn=document.getElementById('menu-btn');
+    const menu=document.getElementById('menu');
     menuBtn.addEventListener('click',()=>menu.classList.toggle('show'));
 
-    /* ===== Theme toggle ===== */
-    const themeToggle = document.getElementById('theme-toggle');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const storedTheme = localStorage.getItem('theme');
+    /* =====  Theme toggle  ===== */
+    const themeToggle=document.getElementById('theme-toggle');
+    const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const storedTheme=localStorage.getItem('theme');
     if(storedTheme==='dark'||(!storedTheme&&prefersDark)){
       document.documentElement.setAttribute('data-theme','dark');
       themeToggle.textContent='☀️';
@@ -179,7 +170,7 @@
       }
     });
 
-    /* ===== Footer year ===== */
+    /* =====  Footer year  ===== */
     document.getElementById('year').textContent=new Date().getFullYear();
   </script>
 </body>
