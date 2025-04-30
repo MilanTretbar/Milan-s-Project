@@ -3,86 +3,180 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Learning Project</title>
+  <title>NBA Playoffs Bracket · Learning Project</title>
   <style>
+    /* =========  DESIGN TOKENS  ========= */
     :root {
-      --primary: #0066ff;
-      --bg: var(--light);
-      --text: #222;
-      --light: #f9f9f9;
-      --dark: #222;
-    }
-    body { margin:0;font-family: system-ui, sans-serif; line-height:1.6; background:var(--light); }
-    header { background: var(--primary); color:#fff; padding:1rem; }
-    nav { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
-    nav h1 { font-size:1.25rem; margin:0; }
-    nav a { color:#fff; text-decoration:none; margin:0 .5rem; }
-    ul { list-style:none; padding:0; margin:0; display:flex; }
-    li { margin:0 .5rem; }
-    .container { max-width:1000px; margin:auto; padding:1rem; }
-    section { margin:2rem 0; }
-    footer { background:var(--dark); color:#fff; text-align:center; padding:1rem; }
-    button, input, textarea { font-family:inherit; font-size:1rem; }
-    button { background:var(--primary); color:#fff; border:none; padding:.5rem 1rem; cursor:pointer; border-radius:4px; }
-    button:hover { opacity:.9; }
+      /* brand palette */
+      --primary:   #0066ff;   /* royal blue */
+      --secondary: #ff5722;   /* vivid orange */
+      --accent:    #00bfa6;   /* teal */
 
-    /* Responsive nav toggle */
-    #menu-btn { display:none; font-size:1.5rem; background:none; border:none; color:#fff; cursor:pointer; }
-    @media (max-width:600px){
-       nav ul{ display:none; width:100%; flex-direction:column; }
-       nav ul.show{ display:block; }
-       nav li{ margin:.5rem 0; text-align:center; }
-       #menu-btn{display:block;}
+      /* grayscale & surfaces */
+      --bg:        #f9f9f9;   /* page background */
+      --surface:   #ffffff;   /* cards / bracket */
+      --text:      #222;      /* default text */
+      --header-text:#fff;     /* header/nav links */
+      --radius:    8px;       /* global corner radius */
     }
+    /* ---- Dark theme overrides ---- */
+    [data-theme="dark"] {
+      --primary:   #3b82f6;
+      --secondary: #ff8a50;
+      --accent:    #26c6da;
+
+      --bg:        #121212;
+      --surface:   #1e1e1e;
+      --text:      #e2e2e2;
+      --header-text:#fff;
+    }
+
+    /* =========  GLOBAL LAYOUT  ========= */
+    *,*:before,*:after{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui, sans-serif;
+      line-height:1.6;
+      background:var(--bg);
+      color:var(--text);
+      transition:background .3s,color .3s;
+    }
+    img{max-width:100%;height:auto;}
+
+    header{
+      background:var(--primary);
+      color:var(--header-text);
+      padding:1rem;
+    }
+    nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      max-width:1100px;
+      margin:auto;
+    }
+    nav h1{font-size:1.3rem;margin:0;}
+    nav a{color:var(--header-text);text-decoration:none;margin:0 .5rem;}
+
+    ul{list-style:none;padding:0;margin:0;display:flex;}
+    li{margin:0 .5rem;}
+
+    #menu-btn{
+      display:none;
+      font-size:1.6rem;
+      background:none;border:none;color:var(--header-text);cursor:pointer;
+    }
+    #theme-toggle{
+      background:none;border:none;font-size:1.4rem;color:var(--header-text);cursor:pointer;margin-left:.5rem;
+    }
+
+    @media(max-width:600px){
+      nav ul{display:none;width:100%;flex-direction:column;background:var(--primary);}
+      nav ul.show{display:block;}
+      nav li{margin:.5rem 0;text-align:center;}
+      #menu-btn{display:block;}
+    }
+
+    .hero-image{width:100%;max-height:400px;object-fit:cover;border-radius:var(--radius);}
+    .container{max-width:1100px;margin:auto;padding:1rem;}
+    section{margin:2rem 0;}
+
+    /* =========  BRACKET ========= */
+    .bracket{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+    .bracket-column{background:var(--surface);padding:1rem;border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,.05);}
+    .bracket-column h3{text-align:center;margin-top:0;color:var(--primary);}
+    .matchup{display:flex;justify-content:space-between;margin:.25rem 0;padding:.25rem .5rem;border-left:4px solid var(--accent);}
+    .seed{font-weight:bold;color:var(--secondary);}
+
+    footer{background:var(--surface);color:var(--text);text-align:center;padding:1rem;border-top:2px solid var(--primary);}  
   </style>
 </head>
 <body>
   <header>
     <nav>
-      <h1>My Learning Project</h1>
-      <button id="menu-btn" aria-label="Menu">&#9776;</button>
+      <h1>NBA Playoffs 2025</h1>
+      <div>
+        <button id="menu-btn" aria-label="Menu">&#9776;</button>
+        <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+      </div>
       <ul id="menu">
         <li><a href="#home">Home</a></li>
+        <li><a href="#bracket">Bracket</a></li>
         <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
   </header>
 
   <main class="container">
     <section id="home">
+      <img class="hero-image" src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1200&q=80" alt="Basketball on a wooden court">
       <h2>Welcome</h2>
-      <p>This is a simple responsive site you can use to practice HTML, CSS and JavaScript. Explore the code and tweak colours, fonts, and layout as you learn.</p>
+      <p>This page levels‑up your starter site with a brand palette, automatic light/dark theme, a hero image, and a live‑text NBA playoff bracket.</p>
+    </section>
+
+    <section id="bracket">
+      <h2>2025 NBA Playoff Bracket &mdash; First Round</h2>
+      <div class="bracket">
+        <!-- Eastern Conference -->
+        <div class="bracket-column">
+          <h3>East</h3>
+          <div class="matchup"><span class="seed">1</span> Cavaliers <span>4&nbsp;&ndash;&nbsp;0</span> Heat <span class="seed">8</span></div>
+          <div class="matchup"><span class="seed">4</span> Celtics <span>4&nbsp;&ndash;&nbsp;1</span> Magic <span class="seed">5</span></div>
+          <div class="matchup"><span class="seed">3</span> Pacers <span>4&nbsp;&ndash;&nbsp;1</span> Bucks <span class="seed">6</span></div>
+          <div class="matchup"><span class="seed">2</span> Knicks <span>3&nbsp;&ndash;&nbsp;2</span> Pistons <span class="seed">7</span></div>
+        </div>
+        <!-- Western Conference -->
+        <div class="bracket-column">
+          <h3>West</h3>
+          <div class="matchup"><span class="seed">1</span> Thunder <span>4&nbsp;&ndash;&nbsp;0</span> Grizzlies <span class="seed">8</span></div>
+          <div class="matchup"><span class="seed">4</span> Warriors <span>3&nbsp;&ndash;&nbsp;1</span> Rockets <span class="seed">5</span></div>
+          <div class="matchup"><span class="seed">3</span> Timberwolves <span>3&nbsp;&ndash;&nbsp;1</span> Lakers <span class="seed">6</span></div>
+          <div class="matchup"><span class="seed">2</span> Nuggets <span>2&nbsp;&ndash;&nbsp;2</span> Clippers <span class="seed">7</span></div>
+        </div>
+      </div>
+      <p style="font-size:.9rem;opacity:.8;">Bracket data reflects series status as of April&nbsp;30, 2025. </p>
     </section>
 
     <section id="about">
-      <h2>About This Project</h2>
-      <p>The goal is to give you a clean starting point: semantic markup, basic styling, and a minimal script. Fork it, break it, fix it, and make it yours!</p>
-    </section>
-
-    <section id="contact">
-      <h2>Contact</h2>
-      <form onsubmit="event.preventDefault(); alert('Thanks for testing!');">
-        <label>Name<br><input type="text" required></label><br><br>
-        <label>Email<br><input type="email" required></label><br><br>
-        <label>Message<br><textarea rows="4"></textarea></label><br><br>
-        <button type="submit">Send</button>
-      </form>
+      <h2>About This Demo</h2>
+      <p>The bracket is built with plain HTML so you can edit scores or advance teams by hand. In a real project you could fetch live data from an NBA API and rerender the grid with JavaScript.</p>
     </section>
   </main>
 
   <footer>
-    &copy; <span id="year"></span> My Learning Project
+    &copy; <span id="year"></span> NBA&nbsp;Playoffs&nbsp;Learning&nbsp;Project
   </footer>
 
   <script>
-    // Mobile nav toggle
-    const btn = document.getElementById('menu-btn');
-    const menu = document.getElementById('menu');
-    btn.addEventListener('click', () => menu.classList.toggle('show'));
+    /* ===== Mobile nav toggle ===== */
+    const menuBtn = document.getElementById('menu-btn');
+    const menu    = document.getElementById('menu');
+    menuBtn.addEventListener('click',()=>menu.classList.toggle('show'));
 
-    // Update footer year automatically
-    document.getElementById('year').textContent = new Date().getFullYear();
+    /* ===== Theme toggle ===== */
+    const themeToggle = document.getElementById('theme-toggle');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const storedTheme = localStorage.getItem('theme');
+    if(storedTheme==='dark'||(!storedTheme&&prefersDark)){
+      document.documentElement.setAttribute('data-theme','dark');
+      themeToggle.textContent='☀️';
+    }
+    themeToggle.addEventListener('click',()=>{
+      const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+      if(isDark){
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme','light');
+        themeToggle.textContent='🌙';
+      }else{
+        document.documentElement.setAttribute('data-theme','dark');
+        localStorage.setItem('theme','dark');
+        themeToggle.textContent='☀️';
+      }
+    });
+
+    /* ===== Footer year ===== */
+    document.getElementById('year').textContent=new Date().getFullYear();
   </script>
 </body>
 </html>
